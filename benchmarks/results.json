@@ -1,0 +1,157 @@
+{
+  "comparisons": [
+    {
+      "engine_seconds": 0.060022879999905854,
+      "n": 4000,
+      "naive_seconds": 4.80478648899998,
+      "note": "naive re-sorts the whole waitlist per cancellation",
+      "speedup": 80.04924936969896,
+      "workload": "4000 registrations + 400 cancellations (capacity 1000)"
+    },
+    {
+      "engine_seconds": 0.04545286099983059,
+      "n": 50000,
+      "naive_seconds": 6.752985107999848,
+      "note": "O(1) tombstone vs O(n) re-heapify per deletion",
+      "speedup": 148.57117812726943,
+      "workload": "1000 removals from a 50,000-entry queue"
+    },
+    {
+      "engine_seconds": 0.03605117600000085,
+      "n": 200000,
+      "naive_seconds": 0.059833161999904405,
+      "note": "heapify O(n) vs n heappush O(n log n)",
+      "speedup": 1.6596729604577392,
+      "workload": "build a 200,000-element heap"
+    }
+  ],
+  "generated_at": "2026-09-10 06:17:58 UTC",
+  "invariants": {
+    "deterministic_rebuild_matches": true,
+    "held_within_capacity": true,
+    "manifest_fingerprint": "a2ac9a1df7eea4b01168f6887f0458b61b382c133a5b8cd1b0301a47308c6cea",
+    "reconcile_violations": [],
+    "tombstone_debt": 0,
+    "unique_seat_numbers": true,
+    "waitlist_heap_array": 3000
+  },
+  "platform": "Linux x86_64 / unknown CPU",
+  "python": "3.13.14",
+  "sizes": [
+    1000,
+    10000,
+    100000
+  ],
+  "slopes": {
+    "cancel + promote": 0.2269,
+    "export manifest": 0.0525,
+    "rank query (worst case)": 0.9959,
+    "register": 0.1525
+  },
+  "timings": [
+    {
+      "n": 1000,
+      "note": "O(1) confirm or O(log n) heap push",
+      "operation": "register",
+      "per_op_seconds": 7.629648000147426e-06,
+      "tier": 1000,
+      "total_seconds": 0.0076296480001474265
+    },
+    {
+      "n": 125,
+      "note": "O(1) tombstone + O(log n) heappop",
+      "operation": "cancel + promote",
+      "per_op_seconds": 6.532735998916905e-06,
+      "tier": 1000,
+      "total_seconds": 0.0008165919998646132
+    },
+    {
+      "n": 500,
+      "note": "O(n) counting scan \u2014 rank is not a heap primitive",
+      "operation": "rank query (worst case)",
+      "per_op_seconds": 6.528700032504275e-05,
+      "tier": 1000,
+      "total_seconds": 6.528700032504275e-05
+    },
+    {
+      "n": 1000,
+      "note": "O(n log n) sort + O(n) I/O",
+      "operation": "export manifest",
+      "per_op_seconds": 5.365146000258391e-06,
+      "tier": 1000,
+      "total_seconds": 0.005365146000258392
+    },
+    {
+      "n": 10000,
+      "note": "O(1) confirm or O(log n) heap push",
+      "operation": "register",
+      "per_op_seconds": 1.0087582799997108e-05,
+      "tier": 10000,
+      "total_seconds": 0.10087582799997108
+    },
+    {
+      "n": 1250,
+      "note": "O(1) tombstone + O(log n) heappop",
+      "operation": "cancel + promote",
+      "per_op_seconds": 8.243607999975211e-06,
+      "tier": 10000,
+      "total_seconds": 0.010304509999969014
+    },
+    {
+      "n": 5000,
+      "note": "O(n) counting scan \u2014 rank is not a heap primitive",
+      "operation": "rank query (worst case)",
+      "per_op_seconds": 0.0005884559996047756,
+      "tier": 10000,
+      "total_seconds": 0.0005884559996047756
+    },
+    {
+      "n": 10000,
+      "note": "O(n log n) sort + O(n) I/O",
+      "operation": "export manifest",
+      "per_op_seconds": 5.025998400014942e-06,
+      "tier": 10000,
+      "total_seconds": 0.050259984000149416
+    },
+    {
+      "n": 100000,
+      "note": "O(1) confirm or O(log n) heap push",
+      "operation": "register",
+      "per_op_seconds": 1.5397418389998165e-05,
+      "tier": 100000,
+      "total_seconds": 1.5397418389998165
+    },
+    {
+      "n": 12500,
+      "note": "O(1) tombstone + O(log n) heappop",
+      "operation": "cancel + promote",
+      "per_op_seconds": 1.8574562560024787e-05,
+      "tier": 100000,
+      "total_seconds": 0.23218203200030985
+    },
+    {
+      "n": 50000,
+      "note": "O(n) counting scan \u2014 rank is not a heap primitive",
+      "operation": "rank query (worst case)",
+      "per_op_seconds": 0.006405598000128521,
+      "tier": 100000,
+      "total_seconds": 0.006405598000128521
+    },
+    {
+      "n": 100000,
+      "note": "O(n log n) sort + O(n) I/O",
+      "operation": "export manifest",
+      "per_op_seconds": 6.831834540003001e-06,
+      "tier": 100000,
+      "total_seconds": 0.6831834540003001
+    },
+    {
+      "n": 2000,
+      "note": "each churn frees a seat, offers it, then recycles it",
+      "operation": "cancel + offer + TTL expiry sweep",
+      "per_op_seconds": 0.0028063865859999167,
+      "tier": 20000,
+      "total_seconds": 5.612773171999834
+    }
+  ]
+}

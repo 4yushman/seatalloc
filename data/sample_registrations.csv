@@ -1,0 +1,32 @@
+attendee_id,name,email,tier,registered_at
+SJ-001,Ayesha Khan,ayesha.khan@example.com,MEMBER,2026-09-01T10:04:11+00:00
+SJ-002,Bilal Ahmed,bilal.ahmed@example.com,GENERAL,2026-09-01T10:09:17+00:00
+SJ-003,Charan Das,charan.das@example.com,GENERAL,2026-09-01T10:13:35+00:00
+SJ-004,Devika Rao,devika.rao@example.com,VOLUNTEER,2026-09-01T10:17:46+00:00
+SJ-005,Emaan Sheikh,emaan.sheikh@example.com,MEMBER,2026-09-01T10:22:26+00:00
+SJ-006,Farhan Qureshi,farhan.qureshi@example.com,GENERAL,2026-09-01T10:27:46+00:00
+SJ-007,Gauri Menon,gauri.menon@example.com,GENERAL,2026-09-01T10:29:43+00:00
+SJ-008,Hiba Ansari,hiba.ansari@example.com,MEMBER,2026-09-01T10:31:37+00:00
+SJ-009,Imran Baig,imran.baig@example.com,GENERAL,2026-09-01T10:36:19+00:00
+SJ-010,Jaya Nair,jaya.nair@example.com,SPEAKER,2026-09-01T10:40:42+00:00
+SJ-011,Kabir Sethi,kabir.sethi@example.com,GENERAL,2026-09-01T10:46:24+00:00
+SJ-012,Lubna Siddiqui,lubna.siddiqui@example.com,MEMBER,2026-09-01T10:51:58+00:00
+SJ-013,Mihir Patel,mihir.patel@example.com,GENERAL,2026-09-01T10:53:53+00:00
+SJ-014,Naina Verma,naina.verma@example.com,VOLUNTEER,2026-09-01T10:55:01+00:00
+SJ-015,Omar Farooq,omar.farooq@example.com,GENERAL,2026-09-01T10:59:09+00:00
+SJ-016,Priya Iyer,priya.iyer@example.com,MEMBER,2026-09-01T11:02:04+00:00
+SJ-017,Qasim Raza,qasim.raza@example.com,GENERAL,2026-09-01T11:03:36+00:00
+SJ-018,Ritika Bose,ritika.bose@example.com,GENERAL,2026-09-01T11:04:42+00:00
+SJ-019,Sahil Khan,sahil.khan@example.com,ORGANIZER,2026-09-01T11:09:37+00:00
+SJ-020,Tanya Gupta,tanya.gupta@example.com,MEMBER,2026-09-01T11:15:52+00:00
+SJ-021,Umar Sheikh,umar.sheikh@example.com,GENERAL,2026-09-01T11:21:36+00:00
+SJ-022,Vidya Menon,vidya.menon@example.com,GENERAL,2026-09-01T11:22:17+00:00
+SJ-023,Wasim Akram,wasim.akram@example.com,MEMBER,2026-09-01T11:27:41+00:00
+SJ-024,Yash Tandon,yash.tandon@example.com,GENERAL,2026-09-01T11:31:23+00:00
+SJ-025,Zoya Mirza,zoya.mirza@example.com,MEMBER,2026-09-01T11:35:34+00:00
+SJ-026,Ananya Rao,ananya.rao@example.com,GENERAL,2026-09-01T11:41:28+00:00
+SJ-027,Basit Ali,basit.ali@example.com,GENERAL,2026-09-01T11:48:06+00:00
+SJ-028,Chirag Jain,chirag.jain@example.com,VOLUNTEER,2026-09-01T11:53:41+00:00
+SJ-001,Ayesha Khan (duplicate submission),ayesha.khan@example.com,MEMBER,2026-09-01T11:54:11+00:00
+SJ-030,Bad Email,not-an-email,GENERAL,2026-09-01T11:54:41+00:00
+SJ-031,Late Arrival,late@example.com,GENERAL,2026-09-01T10:01:00+00:00

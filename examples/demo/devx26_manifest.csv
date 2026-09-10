@@ -1,0 +1,4 @@
+seat_number,reg_id,attendee_id,name,email,tier,status,registered_at_utc,confirmed_at_utc,wait_seconds,promoted_from_waitlist,queue_size_at_registration,note
+2,DEVX26-R000002,A-102,Bilal Ahmed,bilal@example.com,GENERAL,CONFIRMED,2025-11-01T12:27:00+00:00,2025-11-01T12:27:00+00:00,0.00,False,,
+3,DEVX26-R000003,A-103,Charan Das,charan@example.com,GENERAL,CONFIRMED,2025-11-01T12:27:10+00:00,2025-11-01T12:27:10+00:00,0.00,False,,
+4,DEVX26-R000004,A-104,Devika Rao,devika@example.com,VOLUNTEER,CONFIRMED,2025-11-01T12:27:20+00:00,2025-11-01T12:27:20+00:00,0.00,False,,

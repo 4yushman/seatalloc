@@ -1,0 +1,8 @@
+reg_id,attendee_id,name,email,tier,status,registered_at_utc,confirmed_at_utc,decided_at_utc,seat_number,note
+DEVX26-R000001,A-101,Ayesha Khan,ayesha@example.com,MEMBER,CANCELLED,2025-11-01T12:26:50+00:00,2025-11-01T12:26:50+00:00,2025-11-01T12:40:00+00:00,,attendee_cancelled
+DEVX26-R000002,A-102,Bilal Ahmed,bilal@example.com,GENERAL,CONFIRMED,2025-11-01T12:27:00+00:00,2025-11-01T12:27:00+00:00,,2,
+DEVX26-R000003,A-103,Charan Das,charan@example.com,GENERAL,CONFIRMED,2025-11-01T12:27:10+00:00,2025-11-01T12:27:10+00:00,,3,
+DEVX26-R000004,A-104,Devika Rao,devika@example.com,VOLUNTEER,CONFIRMED,2025-11-01T12:27:20+00:00,2025-11-01T12:27:20+00:00,,4,
+DEVX26-R000005,A-105,Emaan Sheikh,emaan@example.com,MEMBER,CANCELLED,2025-11-01T12:27:30+00:00,,2025-11-01T12:42:30+00:00,,declined
+DEVX26-R000006,A-106,Farhan Qureshi,farhan@example.com,GENERAL,OFFERED,2025-11-01T12:27:40+00:00,,,5,
+DEVX26-R000007,A-107,Gauri Menon,gauri@example.com,GENERAL,OFFERED,2025-11-01T12:27:50+00:00,,,6,

@@ -1,0 +1,21 @@
+{"at":0.0,"config":{"capacity":4,"event_id":"DEVX26","max_waitlist_size":null,"name":"DevXJMI 2026 \u2014 Building with LLM APIs","offer_ttl_seconds":600.0,"promotion_mode":"offer","registration_closes_at":null,"registration_opens_at":null,"tier_weights":{"GENERAL":4,"MEMBER":3,"ORGANIZER":0,"SPEAKER":2,"VOLUNTEER":1}},"op":"event_created","sequence":-1}
+{"at":1762000010.0,"attendee_id":"A-101","decision":"CONFIRMED","email":"ayesha@example.com","name":"Ayesha Khan","op":"register","reg_id":"DEVX26-R000001","registered_at":1762000010.0,"sequence":0,"status":"CONFIRMED","tier":"MEMBER"}
+{"at":1762000010.0,"op":"confirm_seat","reg_id":"DEVX26-R000001","seat_number":1,"sequence":1,"status":"CONFIRMED"}
+{"at":1762000020.0,"attendee_id":"A-102","decision":"CONFIRMED","email":"bilal@example.com","name":"Bilal Ahmed","op":"register","reg_id":"DEVX26-R000002","registered_at":1762000020.0,"sequence":2,"status":"CONFIRMED","tier":"GENERAL"}
+{"at":1762000020.0,"op":"confirm_seat","reg_id":"DEVX26-R000002","seat_number":2,"sequence":3,"status":"CONFIRMED"}
+{"at":1762000030.0,"attendee_id":"A-103","decision":"CONFIRMED","email":"charan@example.com","name":"Charan Das","op":"register","reg_id":"DEVX26-R000003","registered_at":1762000030.0,"sequence":4,"status":"CONFIRMED","tier":"GENERAL"}
+{"at":1762000030.0,"op":"confirm_seat","reg_id":"DEVX26-R000003","seat_number":3,"sequence":5,"status":"CONFIRMED"}
+{"at":1762000040.0,"attendee_id":"A-104","decision":"CONFIRMED","email":"devika@example.com","name":"Devika Rao","op":"register","reg_id":"DEVX26-R000004","registered_at":1762000040.0,"sequence":6,"status":"CONFIRMED","tier":"VOLUNTEER"}
+{"at":1762000040.0,"op":"confirm_seat","reg_id":"DEVX26-R000004","seat_number":4,"sequence":7,"status":"CONFIRMED"}
+{"at":1762000050.0,"attendee_id":"A-105","decision":"WAITLISTED","email":"emaan@example.com","name":"Emaan Sheikh","op":"register","reg_id":"DEVX26-R000005","registered_at":1762000050.0,"sequence":8,"status":"WAITLISTED","tier":"MEMBER"}
+{"at":1762000050.0,"op":"waitlist_push","queue_size":1,"reg_id":"DEVX26-R000005","sequence":9,"status":"WAITLISTED"}
+{"at":1762000060.0,"attendee_id":"A-106","decision":"WAITLISTED","email":"farhan@example.com","name":"Farhan Qureshi","op":"register","reg_id":"DEVX26-R000006","registered_at":1762000060.0,"sequence":10,"status":"WAITLISTED","tier":"GENERAL"}
+{"at":1762000060.0,"op":"waitlist_push","queue_size":2,"reg_id":"DEVX26-R000006","sequence":11,"status":"WAITLISTED"}
+{"at":1762000070.0,"attendee_id":"A-107","decision":"WAITLISTED","email":"gauri@example.com","name":"Gauri Menon","op":"register","reg_id":"DEVX26-R000007","registered_at":1762000070.0,"sequence":12,"status":"WAITLISTED","tier":"GENERAL"}
+{"at":1762000070.0,"op":"waitlist_push","queue_size":3,"reg_id":"DEVX26-R000007","sequence":13,"status":"WAITLISTED"}
+{"at":1762000800.0,"op":"cancel","previous":"CONFIRMED","reason":"attendee_cancelled","reg_id":"DEVX26-R000001","seat_recycled":true,"sequence":14,"status":"CANCELLED"}
+{"at":1762000800.0,"expires_at":1762001400.0,"op":"offer_seat","reg_id":"DEVX26-R000005","seat_number":1,"sequence":15,"status":"OFFERED"}
+{"at":1762000900.0,"new":8,"old":4,"op":"set_capacity","sequence":16}
+{"at":1762000900.0,"expires_at":1762001500.0,"op":"offer_seat","reg_id":"DEVX26-R000006","seat_number":5,"sequence":17,"status":"OFFERED"}
+{"at":1762000900.0,"expires_at":1762001500.0,"op":"offer_seat","reg_id":"DEVX26-R000007","seat_number":6,"sequence":18,"status":"OFFERED"}
+{"at":1762000950.0,"op":"decline_offer","reason":"declined","reg_id":"DEVX26-R000005","sequence":19,"status":"CANCELLED"}

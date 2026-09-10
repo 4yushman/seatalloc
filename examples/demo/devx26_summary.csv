@@ -1,0 +1,2 @@
+event_id,capacity,confirmed,offers_outstanding,waitlisted,cancelled,expired,open_seats,fill_rate,total_registrations,total_promotions,avg_wait_to_confirm_seconds,max_wait_to_confirm_seconds,exported_at_utc
+DEVX26,8,3,2,0,2,0,3,0.625,7,3,0.0,0.0,2025-11-01T12:43:20+00:00
