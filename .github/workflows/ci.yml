@@ -50,6 +50,15 @@ jobs:
           PYTHONPATH=src python -m seatalloc export /tmp/demo/devx26_audit.jsonl --out /tmp/rebuilt --stem devx26
           diff /tmp/demo/devx26_manifest.csv /tmp/rebuilt/devx26_manifest.csv
           echo "manifest reproduced byte-for-byte from the audit log ✅"
+      - name: Smoke-test the web demo (stdlib only)
+        run: |
+          python webapp/server.py &
+          SERVER=$!
+          for _ in $(seq 1 20); do curl -sf http://localhost:8000/healthz && break || sleep 0.5; done
+          curl -sf -X POST http://localhost:8000/api/scenario -d '{}' > /dev/null
+          curl -sf http://localhost:8000/api/state | python3 -c "import json,sys; s=json.load(sys.stdin); print('confirmed', s['stats']['confirmed'], 'waitlisted', s['stats']['waitlisted'])"
+          curl -sf http://localhost:8000/api/export/manifest.csv | head -2
+          kill $SERVER
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:

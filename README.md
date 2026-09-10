@@ -108,6 +108,35 @@ python -m seatalloc stats examples/demo/devx26_audit.jsonl --limit 5
 
 ---
 
+## Live web demo (one process, no build step)
+
+The CLI is the deliverable; this is the same engine behind a browser so it can be **shown**
+rather than described. It is a presentation layer only — `webapp/server.py` uses nothing but
+the standard library, so the "zero runtime dependencies" claim still holds end to end.
+
+```bash
+python webapp/server.py          # → http://localhost:8000
+PORT=9000 python webapp/server.py
+```
+
+Then, in the page: set a capacity → register a few people → cancel a confirmed seat → watch the
+next attendee in the queue receive a time-boxed offer → accept/decline it → download the
+manifest, waitlist, audit and summary CSVs. There is a **▶ Run the scripted demo** button that
+sets up the whole story in one click, and a `/healthz` endpoint for uptime checks.
+
+Deploying it takes about two minutes on a free host — full walkthrough in
+[docs/DEPLOY.md](docs/DEPLOY.md). In short: push to GitHub, then on Render
+(*New + → Blueprint*, it reads the bundled `render.yaml`) or any Python host with the start
+command `python webapp/server.py`. Live instance: <!-- paste your deployment URL here -->
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /` | the dashboard |
+| `GET /api/state` | stats, seats, waitlist order, offers, audit tail, manifest fingerprint |
+| `POST /api/register` · `/api/cancel` · `/api/offer` · `/api/expire` · `/api/config` | engine actions |
+| `GET /api/export/{manifest,waitlist,audit,summary}.csv` | the CSV deliverables, generated on demand |
+| `GET /healthz` | liveness probe |
+
 ## Architecture
 
 ```mermaid
@@ -326,6 +355,7 @@ Roadmap ideas: FastAPI wrapper + webhook `POST /events/{id}/cancel`, SQLite/Post
 ```
 seatalloc/
 ├── src/seatalloc/        # library (zero deps)
+├── webapp/               # optional browser demo (stdlib only) + index.html
 ├── tests/                # 99 tests: unit + property + stateful + empirical
 ├── docs/
 │   ├── DESIGN.md         # requirements, alternatives, trade-offs, failure modes
@@ -334,7 +364,8 @@ seatalloc/
 ├── benchmarks/results.json
 ├── examples/demo/        # committed demo output (CSVs + audit log)
 ├── data/sample_registrations.csv
-├── Makefile · pyproject.toml · .github/workflows/ci.yml
+├── docs/DEPLOY.md        # how to get a public URL for the demo
+├── Makefile · render.yaml · Procfile · pyproject.toml · .github/workflows/ci.yml
 ```
 
 ## References

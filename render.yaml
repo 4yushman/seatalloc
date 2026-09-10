@@ -1,0 +1,13 @@
+# One-click deploy on Render (free tier):  New + → Blueprint → pick this repo.
+# Nothing to build — the demo is pure standard library.
+services:
+  - type: web
+    name: seatalloc-demo
+    runtime: python
+    plan: free
+    buildCommand: "echo 'no build step: stdlib only'"
+    startCommand: "python webapp/server.py"
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.0"

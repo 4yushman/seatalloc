@@ -1,5 +1,5 @@
 # Automated Event Seat Allocation Engine — developer tasks
-.PHONY: help install test test-fast test-all lint type check bench demo simulate clean fmt
+.PHONY: help install test test-fast test-all lint type check bench demo web simulate clean fmt
 
 PY ?= python3
 export PYTHONPATH := src
@@ -20,10 +20,10 @@ test-fast:  ## Run everything except the empirical timing tests
 test-all: test  ## Alias for `make test`
 
 lint:  ## Ruff lint
-	$(PY) -m ruff check src tests
+	$(PY) -m ruff check src tests webapp
 
 fmt:  ## Ruff format + autofix
-	$(PY) -m ruff check --fix src tests && $(PY) -m ruff format src tests
+	$(PY) -m ruff check --fix src tests webapp && $(PY) -m ruff format src tests webapp
 
 type:  ## Mypy
 	$(PY) -m mypy src/seatalloc
@@ -32,6 +32,9 @@ check: lint type test  ## Lint + types + tests
 
 bench:  ## Regenerate docs/BENCHMARKS.md and benchmarks/results.json
 	$(PY) -m seatalloc bench --out docs/BENCHMARKS.md
+
+web:  ## Serve the browser demo on http://localhost:8000
+	$(PY) webapp/server.py
 
 demo:  ## Run the guided demo (writes examples/demo/)
 	$(PY) -m seatalloc demo --out examples/demo

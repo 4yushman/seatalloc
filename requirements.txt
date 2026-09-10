@@ -1,0 +1,5 @@
+# The seat allocation engine and its web demo are pure standard library, so this
+# file is intentionally empty of real dependencies — it exists only because some
+# hosts (Render, Railway) expect to find it. Nothing here gets imported.
+#
+# For development tooling instead:  pip install -e ".[dev]"
