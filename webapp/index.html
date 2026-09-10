@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seat Allocation Engine — Live Demo</title>
+<style>
+  :root {
+    --bg: #0b1020;
+    --panel: #141a2e;
+    --panel-2: #1b2338;
+    --line: #263149;
+    --text: #e8ecf7;
+    --muted: #93a0bd;
+    --accent: #6d8cff;
+    --accent-2: #37d0a0;
+    --warn: #ffb454;
+    --danger: #ff6b81;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: radial-gradient(900px 500px at 80% -10%, #1b2440 0%, var(--bg) 60%), var(--bg);
+    color: var(--text);
+    font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; }
+  a { color: var(--accent); }
+
+  header.topbar {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 16px 22px; border-bottom: 1px solid var(--line);
+    background: rgba(11,16,32,.85); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 20;
+  }
+  .logo { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+    background: linear-gradient(140deg, var(--accent), #9a6dff); font-weight: 700; }
+  .title h1 { font-size: 16px; margin: 0; letter-spacing: .2px; }
+  .title p { margin: 1px 0 0; font-size: 12.5px; color: var(--muted); }
+  .spacer { flex: 1; }
+  .pill { font-size: 12px; border: 1px solid var(--line); background: var(--panel);
+    padding: 5px 11px; border-radius: 999px; color: var(--muted); }
+  .pill b { color: var(--accent-2); }
+
+  main { max-width: 1240px; margin: 0 auto; padding: 22px; display: grid; gap: 16px; }
+
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+  .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted);
+    margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+  .panel h2 .count { color: var(--text); background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 999px; padding: 1px 9px; font-size: 11.5px; letter-spacing: 0; }
+
+  .controls { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
+  .field { display: grid; gap: 5px; }
+  .field label { font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  input, select {
+    background: var(--panel-2); color: var(--text); border: 1px solid var(--line);
+    border-radius: 9px; padding: 9px 11px; font: inherit; min-width: 0;
+  }
+  input:focus, select:focus { outline: 2px solid rgba(109,140,255,.45); outline-offset: 0; }
+  button {
+    background: var(--panel-2); color: var(--text); border: 1px solid var(--line);
+    border-radius: 9px; padding: 9px 13px; font: inherit; cursor: pointer; transition: .15s;
+  }
+  button:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-1px); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.primary { background: linear-gradient(140deg, var(--accent), #8f6dff); border-color: transparent; font-weight: 600; }
+  button.ghost { background: transparent; }
+  button.good { border-color: rgba(55,208,160,.5); color: var(--accent-2); }
+  button.bad { border-color: rgba(255,107,129,.45); color: var(--danger); }
+  button.tiny { padding: 4px 9px; font-size: 12px; border-radius: 7px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; }
+  .card .k { font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .card .v { font-size: 25px; font-weight: 650; margin-top: 5px; font-variant-numeric: tabular-nums; }
+  .card .s { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .card.hi .v { color: var(--accent-2); }
+  .card.warn .v { color: var(--warn); }
+
+  .bar { height: 7px; background: var(--panel-2); border-radius: 999px; overflow: hidden; margin-top: 9px; }
+  .bar > i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+
+  .grid { display: grid; grid-template-columns: minmax(260px, 340px) 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; color: var(--muted); }
+  .empty { color: var(--muted); font-size: 13px; padding: 6px 2px; }
+
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .tag.ORGANIZER { color: #ffd479; border-color: rgba(255,212,121,.35); }
+  .tag.VOLUNTEER { color: #8fd6ff; border-color: rgba(143,214,255,.35); }
+  .tag.SPEAKER { color: #d3a8ff; border-color: rgba(211,168,255,.35); }
+  .tag.MEMBER { color: #7ef0c4; border-color: rgba(126,240,196,.35); }
+
+  .seatno { display: inline-grid; place-items: center; min-width: 27px; height: 27px; padding: 0 7px;
+    border-radius: 8px; background: var(--panel-2); border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .rank { color: var(--accent); font-weight: 600; }
+  .offer { display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    padding: 9px 11px; background: var(--panel-2); border: 1px solid rgba(255,180,84,.35);
+    border-radius: 10px; margin-bottom: 8px; }
+  .offer .meta { font-size: 12.5px; color: var(--muted); }
+
+  .log { max-height: 210px; overflow: auto; background: #0d1326; border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 12px; }
+  .log div { padding: 2px 0; color: var(--muted); }
+  .log b { color: var(--accent-2); font-weight: 600; }
+
+  #toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px);
+    background: var(--panel-2); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+    padding: 11px 16px; border-radius: 10px; opacity: 0; pointer-events: none; transition: .22s; z-index: 50; }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .hint { font-size: 12.5px; color: var(--muted); }
+  ol.steps { margin: 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
+  ol.steps li { margin-bottom: 5px; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">◧</div>
+  <div class="title">
+    <h1>Automated Event Seat Allocation Engine</h1>
+    <p>Heap-based waitlist · tiered FIFO · live audit log · CSV manifest</p>
+  </div>
+  <div class="spacer"></div>
+  <span class="pill">promotion mode <b id="pill-mode">—</b></span>
+  <span class="pill">engine <b>stdlib only</b></span>
+</header>
+
+<main>
+  <!-- controls -->
+  <section class="panel">
+    <h2>Event controls</h2>
+    <div class="controls">
+      <div class="field">
+        <label for="cap">Capacity (seats)</label>
+        <input id="cap" type="number" min="0" max="9999" value="3" style="width: 120px">
+      </div>
+      <div class="field">
+        <label for="mode">Promotion mode</label>
+        <select id="mode">
+          <option value="offer">OFFER — offer seat, must accept</option>
+          <option value="auto">AUTO — promote instantly</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="ttl">Offer TTL (seconds)</label>
+        <input id="ttl" type="number" min="5" max="86400" value="120" style="width: 120px">
+      </div>
+      <button class="primary" onclick="applyConfig()">Apply</button>
+      <button onclick="runScenario()">▶ Run the scripted demo</button>
+      <button class="ghost" onclick="resetAll()">Reset</button>
+      <div class="spacer"></div>
+      <button class="ghost" onclick="expireOffers()">⌛ Expire overdue offers</button>
+    </div>
+  </section>
+
+  <!-- stat cards -->
+  <section class="cards" id="cards"></section>
+
+  <div class="grid">
+    <!-- left: registration form -->
+    <div style="display: grid; gap: 16px">
+      <section class="panel">
+        <h2>Register an attendee</h2>
+        <div style="display: grid; gap: 11px">
+          <div class="field"><label for="name">Name</label><input id="name" placeholder="Ayesha Khan"></div>
+          <div class="field"><label for="email">Email</label><input id="email" placeholder="ayesha@example.com"></div>
+          <div class="field">
+            <label for="tier">Tier (priority)</label>
+            <select id="tier">
+              <option>GENERAL</option><option>MEMBER</option><option>VOLUNTEER</option>
+              <option>SPEAKER</option><option>ORGANIZER</option>
+            </select>
+          </div>
+          <button class="primary" onclick="registerAttendee()">Register → allocate a seat</button>
+          <p class="hint">Fills an open seat while one exists, otherwise joins the waitlist in
+            tier-then-FIFO order.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Try this in the demo</h2>
+        <ol class="steps">
+          <li>Set capacity 3, press <b>Apply</b>.</li>
+          <li>Register 5 people — the first 3 get seats, the rest queue.</li>
+          <li>A <span class="tag MEMBER">MEMBER</span> jumps ahead of a <span class="tag">GENERAL</span> registration.</li>
+          <li>Cancel a confirmed seat → the next in the queue gets an <b>offer</b>.</li>
+          <li>Accept it (or let the TTL lapse and press <b>Expire</b> to recycle the seat).</li>
+          <li>Download the manifest CSV and replay the audit log.</li>
+        </ol>
+      </section>
+    </div>
+
+    <!-- right: live state -->
+    <div style="display: grid; gap: 16px">
+      <section class="panel">
+        <h2>Offers outstanding <span class="count" id="c-offers">0</span></h2>
+        <div id="offers"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Confirmed seats <span class="count" id="c-confirmed">0</span></h2>
+        <div id="confirmed"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Waitlist (promotion order) <span class="count" id="c-wait">0</span></h2>
+        <div id="waitlist"></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="panel">
+    <h2>Deliverable exports</h2>
+    <div class="row">
+      <button onclick="download('manifest')">⬇ attendee manifest CSV</button>
+      <button onclick="download('waitlist')">⬇ waitlist CSV</button>
+      <button onclick="download('audit')">⬇ audit CSV</button>
+      <button onclick="download('summary')">⬇ event summary CSV</button>
+      <div class="spacer"></div>
+      <span class="pill">manifest SHA-256 <b id="fp" class="mono"></b></span>
+    </div>
+    <p class="hint" style="margin-top: 10px">The fingerprint above is a hash of the manifest bytes:
+      the same inputs always produce the same hash, which is how the tests prove the engine is
+      deterministic.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Audit log (append-only, replayable)</h2>
+    <div class="log mono" id="log"></div>
+  </section>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+async function api(path, body) {
+  const res = await fetch(path, body ? {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  } : undefined);
+  const data = await res.json();
+  if (data.message) toast(data.message);
+  render(data.state ?? data);
+  return data;
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = $("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 2600);
+}
+
+function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function tag(tier) { return `<span class="tag ${esc(tier)}">${esc(tier)}</span>`; }
+function fmtWait(s) { return s < 60 ? `${s.toFixed(0)}s` : `${(s / 60).toFixed(1)}m`; }
+
+function render(st) {
+  if (!st || !st.stats) return;
+  const s = st.stats;
+  $("pill-mode").textContent = st.event.promotion_mode.toUpperCase();
+  $("fp").textContent = st.fingerprint.slice(0, 16) + "…";
+  // don't fight the user while they are typing in the controls
+  if (document.activeElement !== $("cap")) $("cap").value = st.event.capacity;
+  if (document.activeElement !== $("mode")) $("mode").value = st.event.promotion_mode;
+  if (document.activeElement !== $("ttl")) $("ttl").value = Math.round(st.event.offer_ttl_seconds);
+
+  $("cards").innerHTML = [
+    card("Seats held", `${s.held_seats}/${s.capacity}`, s.open_seats + " open", "hi",
+      `<div class="bar"><i style="width:${Math.min(100, s.fill_rate * 100).toFixed(1)}%"></i></div>`),
+    card("Confirmed", s.confirmed, "occupying a seat"),
+    card("Waitlisted", s.waitlisted, "avg wait " + fmtWait(s.avg_current_wait_seconds), s.waitlisted ? "warn" : ""),
+    card("Offers out", s.offers_outstanding, s.expired_offers + " expired so far"),
+    card("Total promotions", s.total_promotions, "seat freed → queue advanced"),
+    card("Cancelled", s.cancelled, "never re-numbered"),
+    card("Tombstone debt", s.tombstone_debt, "heap slots to compact"),
+  ].join("");
+
+  $("c-offers").textContent = st.offers.length;
+  $("offers").innerHTML = st.offers.length ? st.offers.map((o) => `
+    <div class="offer">
+      <div>
+        <b>${esc(o.name)}</b> ${tag(o.tier)}
+        <div class="meta">seat ${o.seat_number ?? "—"} · expires in ${Math.max(0, Math.round(o.expires_in))}s
+          · ${esc(o.reg_id)}</div>
+      </div>
+      <div class="row">
+        <button class="tiny good" onclick="offerd('${o.reg_id}', true)">Accept</button>
+        <button class="tiny bad" onclick="offerd('${o.reg_id}', false)">Decline</button>
+      </div>
+    </div>`).join("") : `<p class="empty">No seat offers waiting on a reply.</p>`;
+
+  $("c-confirmed").textContent = st.confirmed.length;
+  $("confirmed").innerHTML = st.confirmed.length ? table(
+    ["Seat", "Name", "Tier", "Status", "Waited", "Promoted from queue", ""],
+    st.confirmed.map((r) => [
+      `<span class="seatno">${r.seat_number}</span>`, esc(r.name), tag(r.tier), esc(r.status),
+      `<span class="num">${fmtWait(r.waited)}</span>`,
+      r.promoted ? "yes" : "—",
+      r.cancellable ? `<button class="tiny bad" onclick="cancel('${r.reg_id}')">Cancel</button>` : "",
+    ])) : `<p class="empty">Nobody holds a seat yet.</p>`;
+
+  $("c-wait").textContent = st.waitlist.length;
+  $("waitlist").innerHTML = st.waitlist.length ? table(
+    ["#", "Name", "Tier", "Weight", "Waiting", "Queued behind"],
+    st.waitlist.map((r) => [
+      `<span class="rank">${r.position}</span>`, esc(r.name), tag(r.tier),
+      `<span class="num">${r.priority_weight}</span>`,
+      `<span class="num">${fmtWait(r.waiting)}</span>`,
+      `<span class="num">${r.queued_behind ?? "—"}</span>`,
+    ])) : `<p class="empty">Queue is empty.</p>`;
+
+  $("log").innerHTML = st.log.map((e) => `<div><b>${esc(e.op)}</b> ${esc(e.detail)}</div>`).join("")
+    || `<div class="empty">No events yet.</div>`;
+}
+
+function card(k, v, s, cls = "", extra = "") {
+  return `<div class="card ${cls}"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div>
+    <div class="s">${esc(s)}</div>${extra}</div>`;
+}
+
+function table(head, rows) {
+  return `<table><thead><tr>${head.map((h) => `<th>${h}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+
+const registerAttendee = () => api("/api/register", {
+  name: $("name").value, email: $("email").value, tier: $("tier").value,
+}).then((d) => { if (d.ok) { $("name").value = ""; $("email").value = ""; } });
+
+const cancel = (id) => api("/api/cancel", { reg_id: id });
+const offerd = (id, accept) => api("/api/offer", { reg_id: id, accept });
+const expireOffers = () => api("/api/expire", {});
+const resetAll = () => api("/api/reset", { capacity: +$("cap").value, mode: $("mode").value, ttl: +$("ttl").value });
+const applyConfig = () => api("/api/config", { capacity: +$("cap").value, mode: $("mode").value, ttl: +$("ttl").value });
+const runScenario = () => api("/api/scenario", {});
+
+function download(kind) {
+  const a = document.createElement("a");
+  a.href = `/api/export/${kind}.csv`;
+  a.download = `live_${kind}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+api("/api/state");
+setInterval(() => api("/api/state"), 5000);
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a38f3cee58866720',t:'MTc4OTA1MTc1Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
