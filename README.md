@@ -40,7 +40,7 @@ This engine answers all four with a small, well-tested core built on the right d
 ## Quickstart
 
 ```bash
-git clone https://github.com/<your-handle>/seatalloc.git
+git clone https://github.com/4yushman/seatalloc.git
 cd seatalloc
 pip install -e ".[dev]"          # or: export PYTHONPATH=src
 

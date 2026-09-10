@@ -37,6 +37,9 @@ make check         # lint + types + full test suite
 
 ## Reporting a bug
 
+Repo: <https://github.com/4yushman/seatalloc> — open an issue at
+<https://github.com/4yushman/seatalloc/issues>.
+
 Include the audit log (`.jsonl`) and the output of `python -m seatalloc verify <log>`. If the
 log reproduces it, the bug is reproducible by definition — that is the whole point of the
 append-only design.
